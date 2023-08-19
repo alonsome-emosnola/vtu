@@ -1,0 +1,23 @@
+{
+    "transactions": {
+        "status": "delivered",
+        "product_name": "GLO Data",
+        "unique_element": "08011111111",
+        "unit_price": 100,
+        "quantity": 1,
+        "service_verification": null,
+        "channel": "api",
+        "commission": 4,
+        "total_amount": 96,
+        "discount": null,
+        "type": "Data Services",
+        "email": "elusieemmanuel@gmail.com",
+        "phone": "08139746712",
+        "name": null,
+        "convinience_fee": 0,
+        "amount": "100.00",
+        "platform": "api",
+        "method": "wallet",
+        "transactionId": "16920947991155375524134010"
+    }
+}
