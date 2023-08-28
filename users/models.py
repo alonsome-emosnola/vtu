@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from PIL import Image
 # Extending User Model Using a One-To-One Link
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    phone_number = models.CharField(default="NULL", max_length=11, null="False", blank=False, unique=True)
     avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
     bio = models.TextField()
 

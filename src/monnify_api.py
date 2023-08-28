@@ -1,7 +1,7 @@
 # from .monnify.pymonnify.pymonnify import InitializeMonnify
 import os
 from dotenv import load_dotenv
-from monnify.monnify import get_token, monnifyCredential, Monnify
+from src.monnify.monnify import get_token, monnifyCredential, Monnify
 
 load_dotenv()
 
@@ -20,7 +20,7 @@ token = get_token(login_credential)
 
 # reserve_limited_acc = init.reserve_account_with_limit(token, login_credential, '32PD2N23LBRF', CONTRACT_CODE, "TestLimit003_P1", "NGN", "ref-001-27/08/2023", "test@testlimit.com", "Test Limit")
 
-print(init.get_banks(token, login_credential))
+print()
 
 
 # reserve_account = init.reserve_account(token, login_credential, accountReference='tw663552', accountName='Samson Olu', customerEmail='olusam@gmail.com', customerName="Samson Olu", customerBvn='66377273233', availableBank=True)
