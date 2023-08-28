@@ -7,7 +7,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 
 from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
-
+from src.monnify_api import init, login_credential, token
 
 def home(request):
     return render(request, 'users/home.html')
@@ -37,6 +37,11 @@ class RegisterView(View):
             form.save()
 
             username = form.cleaned_data.get('username')
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            email = form.cleaned_data.get('email')
+            user_reserved_acc = init.reserve_account(token, login_credential)
+            print(first_name, last_name, email)
             messages.success(request, f'Account created for {username}')
 
             return redirect(to='login')

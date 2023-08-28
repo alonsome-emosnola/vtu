@@ -2,7 +2,6 @@ python-dotenv==1.0.0
 random-text-generator==1.1.0
 requests==2.31.0
 django-debug-toolbar==4.2.0
-teamapt-monnify==1.1.1
 asgiref==3.5.2
 certifi==2022.9.24
 cffi==1.15.1
@@ -21,3 +20,4 @@ social-auth-app-django==5.0.0
 social-auth-core==4.3.0
 sqlparse==0.4.3
 urllib3==1.26.12
+mysqlclient==2.2.0

@@ -42,7 +42,7 @@ def get_token(credentials):
 
         response_dict = json.loads(response.text)
     
-        a = response_dict
+        a = response_dict['responseBody']['accessToken']
         return f'Bearer {a}'
     else:
         return getlive(live)
@@ -590,6 +590,145 @@ class Monnify:
 
             response = requests.request("POST", url, auth=HTTPBasicAuth(username, password), headers=headers, data = json.dumps(payload))
 
+            r_dict = json.loads(response.text)
+            return r_dict
+        else:
+            return getlive(live)
+        
+    def create_limit_profile(self, token, credentials, limit_name, single_T_value, daily_T_volume, daily_T_value):
+        payload = {
+            "limitProfileName": limit_name,
+            "singleTransactionValue": single_T_value,
+            "dailyTransactionVolume": daily_T_volume,
+            "dailyTransactionValue": daily_T_value
+        }
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+        live = credentials['is_live']
+        if live == True or live == False:
+            baseurl = getlive(live)
+            username = credentials['api_key']
+            password = credentials['secret_key']
+            contractCode = credentials['contract']
+            url = f'{baseurl}/api/v1/limit-profile/'
+            
+            response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+            r_dict = json.loads(response.text)
+            return r_dict
+        else:
+            return getlive(live)
+    def get_limit_profile(self, token, credentials):
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+        live = credentials['is_live']
+        if live == True or live == False:
+            baseurl = getlive(live)
+            username = credentials['api_key']
+            password = credentials['secret_key']
+            contractCode = credentials['contract']
+            url = f'{baseurl}/api/v1/limit-profile/'
+            
+            response = requests.request("GET", url, headers=headers)
+            r_dict = json.loads(response.text)
+            return r_dict
+        else:
+            return getlive(live)
+        
+    def update_limit_profile(self, token, credentials, limit_profile_code, limit_name, single_T_value, daily_T_volume, daily_T_value):
+        payload = {
+            "limitProfileName": limit_name,
+            "singleTransactionValue": single_T_value,
+            "dailyTransactionVolume": daily_T_volume,
+            "dailyTransactionValue": daily_T_value
+        }
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+        live = credentials['is_live']
+        if live == True or live == False:
+            baseurl = getlive(live)
+            username = credentials['api_key']
+            password = credentials['secret_key']
+            contractCode = credentials['contract']
+            url = f'{baseurl}/api/v1/limit-profile/{limit_profile_code}'
+            
+            response = requests.request("PUT", url, headers=headers, data=json.dumps(payload))
+            r_dict = json.loads(response.text)
+            return r_dict
+        else:
+            return getlive(live)
+        
+    def reserve_account_with_limit(self, token, credentials, limit_profile_code, contract_code, account_name, currency_code, account_reference, customer_email, customer_name):
+        payload = {
+            "contractCode": contract_code,
+            "accountName": account_name,
+            "currencyCode": currency_code,
+            "accountReference": account_reference,
+            "customerName": customer_name,
+            "customerEmail": customer_email,
+            "limitProfileCode": limit_profile_code
+        }
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+        live = credentials['is_live']
+        if live == True or live == False:
+            baseurl = getlive(live)
+            username = credentials['api_key']
+            password = credentials['secret_key']
+            contractCode = credentials['contract']
+            url = f'{baseurl}/api/v1/bank-transfer/reserved-accounts/limit'
+            
+            response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+            r_dict = json.loads(response.text)
+            return r_dict
+        else:
+            return getlive(live)
+        
+    def update_reserve_account_with_limit(self, token, credentials, limit_profile_code,  account_reference):
+        payload = {
+            "accountReference": account_reference,
+            "limitProfileCode": limit_profile_code
+        }
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+        live = credentials['is_live']
+        if live == True or live == False:
+            baseurl = getlive(live)
+            username = credentials['api_key']
+            password = credentials['secret_key']
+            contractCode = credentials['contract']
+            url = f'{baseurl}/api/v1/bank-transfer/reserved-accounts/limit'
+            
+            response = requests.request("PUT", url, headers=headers, data=json.dumps(payload))
+            r_dict = json.loads(response.text)
+            return r_dict
+        else:
+            return getlive(live)
+        
+    def get_banks(sef, token, credentials):
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+        
+        live = credentials['is_live']
+        if live == True or live == False:
+            baseurl = getlive(live)
+            username = credentials['api_key']
+            password = credentials['secret_key']
+            contractCode = credentials['contract']
+            url = f'{baseurl}/api/v1/banks'
+            
+            response = requests.request("GET", url, headers=headers)
             r_dict = json.loads(response.text)
             return r_dict
         else:

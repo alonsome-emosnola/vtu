@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
-from src.monnify_api import get_customer_reserved_accounts
+from src.monnify_api import init, login_credential, token
+
 
 # Create your views here.
 """

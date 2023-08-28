@@ -15,35 +15,35 @@ WALLET_ID = os.getenv("WALLET_ID")
 login_credential = monnifyCredential(api_key=API_KEY, secret_key=SECRET_KEY, contract=CONTRACT_CODE, walletId=WALLET_ID, is_live=False)
 token = get_token(login_credential)
 
-reserve_account = init.reserve_account(token, login_credential, accountReference='tw663552', accountName='Samson Olu', customerEmail='olusam@gmail.com', customerName="Samson Olu", customerBvn='66377273233', availableBank=True)
-print(reserve_account)
+# limit_profile = init.get_limit_profile(token, login_credential)
+# print(limit_profile)
 
-# init = InitializeMonnify(apiKey=API_KEY, secretKey=SECRET_KEY, contractCode=CONTRACT_CODE, refStart="EMP",currencyCode="NGN")
+# reserve_limited_acc = init.reserve_account_with_limit(token, login_credential, '32PD2N23LBRF', CONTRACT_CODE, "TestLimit003_P1", "NGN", "ref-001-27/08/2023", "test@testlimit.com", "Test Limit")
 
-
-# def make_deposit(amount, customer_email, customer_name, payment_description, redirect_url="https://monnify.com"):
-#     try:
-#         t = init.initializeTransaction(amount=amount, customerEmail=customer_email, customerName=customer_name,
-#                                        paymentDescription=payment_description)
-#         return t
-#     except Exception:
-#         print("Something went wrong, please try again")
-#     else:
-#         # redirect user to redirect_url
-#         # notify user via email or SMS
-#         pass
+print(init.get_banks(token, login_credential))
 
 
-# def get_customer_reserved_accounts(customer_name, customer_email, customer_BVN, bankCodes):
-#     try:
-#         tt = init.reserveBankAccount(customerBVN=customer_BVN, customerEmail=customer_email,customerName=customer_name, preferredCodes=bankCodes)
-#     except ConnectionError as e:
-#         print("Error trying to connect, please check your internet connection " + e.strerror)
-#     except Exception as e:
-#         print(e)
-#     else:
-#         return tt
-        
-# accs = get_customer_reserved_accounts("Elon", "elon@elon.com", "21061582610", [232, "035"])
-# print(accs)
+# reserve_account = init.reserve_account(token, login_credential, accountReference='tw663552', accountName='Samson Olu', customerEmail='olusam@gmail.com', customerName="Samson Olu", customerBvn='66377273233', availableBank=True)
+
+# transfer = init.tranfer()
+# check = init.verify_account(login_credential, 2106158261, 232)
+# invoice = init.create_invoice(
+#               login_credential, 
+#               amount='1000', 
+#               invoiceReference='uueyyws', 
+#               description='test invoice', 
+#               customerEmail='test@gmail.com', 
+#               customerName='Samson', 
+#               expiryDate='2023-08-30 12:00:00', 
+#               paymentMethods=['CARD', 'ACCOUNT_TRANSFER', 'USSD'], 
+#               redirectUrl='https://monnify-webhook.onrender.com/get-monnify-transactions/latest'
+#               )
+
+# wallet_balance = init.get_wallet_balance(login_credential)
+# init.reserve_account_transactions(token, login_credential)
+
+# invoiceReference
+# accountReference
+# transferReference
+
 
