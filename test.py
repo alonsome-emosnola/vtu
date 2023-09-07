@@ -1,4 +1,9 @@
 # import requests
+# from django.contrib.auth.models import User
+
+# full_name = User.objects.all()
+
+# print(full_name)
 
 # stop = True
 # r = requests.post("https://monnify-webhook.onrender.com/monnify-transactions")

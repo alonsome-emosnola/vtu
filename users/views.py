@@ -37,11 +37,10 @@ class RegisterView(View):
             form.save()
 
             username = form.cleaned_data.get('username')
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
-            email = form.cleaned_data.get('email')
-            user_reserved_acc = init.reserve_account(token, login_credential)
-            print(first_name, last_name, email)
+            # first_name = form.cleaned_data.get('first_name')
+            # last_name = form.cleaned_data.get('last_name')
+            # email = form.cleaned_data.get('email')
+            # user_reserved_acc = init.reserve_account(token, login_credential)
             messages.success(request, f'Account created for {username}')
 
             return redirect(to='login')

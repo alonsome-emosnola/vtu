@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse, HttpRequest, QueryDict
+from django.http import HttpResponse, JsonResponse, response
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from src.vtpass_post import buy_airtime, check_airtime_purchase_status
 from src.vtpass_get import get_balance, get_data_variation_codes
 from src.wallet_api import WalletAPI
@@ -19,13 +20,16 @@ def index(request):
     }
     return JsonResponse(get_balance(), safe=False)
 
+@login_required
 @csrf_exempt
 def buy_airtime_for_self(request, serviceID):
+    wallet = WalletAPI()
+    bal = wallet.get_user_wallet_balance(request.user.username, request.user.email)
     if serviceID in ["mtn", "airtel", "glo", "etisalat"]:
         if request.method == "POST":
             amount = request.POST.get("amount")
             number = request.POST.get("number")
-            if int(amount) >= 1000 or int(amount) < 50: # wallet balance
+            if int(amount) >= bal and int(amount) < WalletAPI.MINIMUM_BAL: # wallet balance
                 return JsonResponse({"status": "Error, please check your wallet balance"}, safe=False)
             if len(number) != 11:
                 return JsonResponse({"status": f"Phone number {number} is not upto 11 digits", "length_of_number": len(number)}, safe=False)
@@ -33,6 +37,7 @@ def buy_airtime_for_self(request, serviceID):
                 return JsonResponse({"status": f"Phone number {number} does not start with zero"}, safe=False)
             else:
                 request_ID = buy_airtime(serviceID, amount, number=number)
+                wallet.sub_user_wallet_balance(amount, request.user.username, request.user.email)
                 # TODO update user wallet balance
                 # TODO update user transaction history
                 return redirect(f"check_status/?request-id={request_ID}")
@@ -41,6 +46,7 @@ def buy_airtime_for_self(request, serviceID):
     else:
         return JsonResponse({"status": f"service ID {serviceID} not valid, try 'mtn, airtel, glo or etisalat'"}, safe=False)
 
+@login_required
 @csrf_exempt
 def check_airtime_status(request, serviceID):
     requestID = request.GET.get("request-id")
@@ -48,6 +54,8 @@ def check_airtime_status(request, serviceID):
     result["service_id"] = serviceID
     return JsonResponse(result, safe=False)
 
+@login_required
 def buy_for_others(request):
-    return JsonResponse("", safe=False)
+    print(request.user.profile)
+    return JsonResponse({"status": "Successful"}, safe=False)
 

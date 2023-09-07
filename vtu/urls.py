@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.contrib.auth import views as auth_views
-from users.views import CustomLoginView, ResetPasswordView, ChangePasswordView
+from users.views import CustomLoginView, ResetPasswordView, ChangePasswordView, RegisterView, profile, home
 
 from users.forms import LoginForm
 
@@ -36,6 +36,10 @@ urlpatterns = [
     path('user/', include('users.urls')),
 
     path('user/login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='users/login.html', authentication_form=LoginForm), name='login'),
+    
+    path('', home, name='users-home'),
+    path('register/', RegisterView.as_view(), name='users-register'),
+    path('profile/', profile, name='users-profile'),
 
     path('user/logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
 

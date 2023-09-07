@@ -86,6 +86,10 @@ WSGI_APPLICATION = 'vtu.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            "init_command":"SET foreign_key_checks = 0;",
+        },
         'NAME': 'vtu',
         'USER': 'root',
         'PASSWORD': '',
@@ -178,4 +182,6 @@ EMAIL_HOST_USER = str(os.getenv('SMTP_USERNAME'))
 EMAIL_HOST_PASSWORD = str(os.getenv('SMTP_PASSWORD'))
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+
+# AUTH_USER_MODEL = 'users.Profile'
 

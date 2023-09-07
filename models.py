@@ -8,30 +8,6 @@
 from django.db import models
 
 
-class AccountsCustomuser(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    username = models.CharField(max_length=100)
-    email = models.CharField(max_length=254)
-    phone_number = models.CharField(max_length=11)
-    password = models.CharField(max_length=20)
-    date_joined = models.DateTimeField()
-    email_verified = models.IntegerField()
-    is_active = models.IntegerField()
-    is_staff = models.IntegerField()
-    is_superuser = models.IntegerField()
-    last_login = models.DateTimeField(blank=True, null=True)
-    phone_verified = models.IntegerField()
-    referral_link = models.CharField(max_length=256)
-    referred_by = models.CharField(max_length=256, blank=True, null=True)
-    session_id = models.CharField(db_column='session_ID', max_length=256)  # Field name made lowercase.
-    wallet_balance = models.CharField(max_length=256, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'accounts_customuser'
-
 class AccountsUserGroups(models.Model):
     id = models.BigAutoField(primary_key=True)
     user_id = models.BigIntegerField()
@@ -89,11 +65,10 @@ class AuthUser(models.Model):
     username = models.CharField(unique=True, max_length=150)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=254)
+    email = models.CharField(unique=True, max_length=254)
     is_staff = models.IntegerField()
     is_active = models.IntegerField()
     date_joined = models.DateTimeField()
-    wallet_balance = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -260,7 +235,15 @@ class UsersProfile(models.Model):
     id = models.BigAutoField(primary_key=True)
     avatar = models.CharField(max_length=100)
     user = models.OneToOneField(AuthUser, models.DO_NOTHING)
-    bio = models.TextField()
+    username = models.OneToOneField(AuthUser, models.DO_NOTHING, db_column='username')
+    email = models.OneToOneField(AuthUser, models.DO_NOTHING, db_column='email')
+    phone_number = models.CharField(max_length=11, blank=True, null=True)
+    email_verified = models.IntegerField()
+    phone_verified = models.IntegerField()
+    referral_link = models.CharField(max_length=256, blank=True, null=True)
+    referred_by = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='referred_by', to_field='username', blank=True, null=True)
+    session_id = models.CharField(db_column='session_ID', max_length=256)  # Field name made lowercase.
+    wallet_balance = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         managed = False
