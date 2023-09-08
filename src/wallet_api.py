@@ -5,7 +5,7 @@ class WalletAPI:
     MINIMUM_BAL = 50
 
     def __init__(self):
-        wallet_balances = Profile.objects.get().wallet_balance
+        # wallet_balances = Profile.objects.get().wallet_balance
         # check if all users wallet balance is not equal or greater than admin balance and not less than minimum balance
         pass
     

@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views import View
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt, csrf_protect, requires_csrf_token, ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
 from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from src.monnify_api import init, login_credential, token
@@ -49,9 +51,10 @@ class RegisterView(View):
 
 
 # Class based view that extends from the built in login view to add a remember me functionality
+
 class CustomLoginView(LoginView):
     form_class = LoginForm
-
+    
     def form_valid(self, form):
         remember_me = form.cleaned_data.get('remember_me')
 

@@ -15,6 +15,7 @@ pageTitle = "Smarttelweb | We offer instant recharge of Airtime, Databundle, Cab
 
 @csrf_exempt
 def index(request):
+    print(request.user.email)
     response = {
         "pageTitle": pageTitle,
     }
@@ -23,6 +24,7 @@ def index(request):
 @login_required
 @csrf_exempt
 def buy_airtime_for_self(request, serviceID):
+    print(request.user)
     wallet = WalletAPI()
     bal = wallet.get_user_wallet_balance(request.user.username, request.user.email)
     if serviceID in ["mtn", "airtel", "glo", "etisalat"]:
@@ -56,6 +58,6 @@ def check_airtime_status(request, serviceID):
 
 @login_required
 def buy_for_others(request):
-    print(request.user.profile)
+    print(request.user)
     return JsonResponse({"status": "Successful"}, safe=False)
 
