@@ -7,7 +7,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, requires_csrf_token, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-
+from .models import Profile
 from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from src.monnify_api import init, login_credential, token
 
@@ -39,6 +39,14 @@ class RegisterView(View):
             form.save()
 
             username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            # https://{domain_name}/ref/{bonus_amount}?user={username}&email={user_email}
+            # https://www.vtu.com/ref/100?user=test2313&email=test@test.com
+            bonus_amount = 100 # admin can update bonus amount
+            ref_link = f"https://{request.host}/ref/{bonus_amount}?user={username}&email={email}"
+            user = Profile.objects.select_related('user').filter(user__username=username, user__email=email)[0]
+            user.referral_link = ref_link
+            user.save()
             # first_name = form.cleaned_data.get('first_name')
             # last_name = form.cleaned_data.get('last_name')
             # email = form.cleaned_data.get('email')
@@ -100,5 +108,6 @@ def profile(request):
     else:
         user_form = UpdateUserForm(instance=request.user)
         profile_form = UpdateProfileForm(instance=request.user.profile)
+        ref_link = Profile.objects.select_related('user').filter(user__username=request.user.username, user__email=request.user.email)[0].referral_link
 
-    return render(request, 'users/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'users/profile.html', {'user_form': user_form, 'profile_form': profile_form, "ref_link": ref_link})

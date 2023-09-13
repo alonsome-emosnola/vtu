@@ -3,8 +3,10 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from src.vtpass_get import(get_data_variation_prices, get_service_categories, get_data_variation_codes)
 from src.vtpass_post import(buy_data, check_data_purchase_status)
+from src.wallet_api import WalletAPI
 
 
 # Create your views here.
@@ -29,8 +31,10 @@ def data_prices(request):
     #     print(fixed_price)
     return JsonResponse(varations, safe=False)
 
+@login_required
 @csrf_exempt
 def buy_data_for_self(request, serviceID):
+    wallet = WalletAPI(request.user.username, request.user.email)
     if request.method == "POST":
         billers_code = request.POST.get("billersCode")
         variation_code = request.POST.get("variationCode")
@@ -58,7 +62,7 @@ def buy_data_for_self(request, serviceID):
                 "status": f"Variation code, {variation_code} is invalid"
             }
             return JsonResponse(response, safe=False)
-        if int(amount) >= 1000 or int(amount) < 50: 
+        if float(amount) > wallet.get_user_wallet_balance() or float(amount) < wallet.MINIMUM_BAL: 
             # 1000 here means wallet balance
             response = {
                 "status": f"Amount #{amount} is insufficient or below limit"
@@ -75,6 +79,7 @@ def buy_data_for_self(request, serviceID):
         }
         return JsonResponse(response, safe=False)
     request_id = buy_data(serviceID, billers_code, variation_code, amount, number)
+    wallet.sub_user_wallet_balance(amount=amount)
     return redirect(f"check_status/?requestID={request_id}")
 
 def check_status(request, serviceID):

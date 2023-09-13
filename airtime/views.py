@@ -15,7 +15,6 @@ pageTitle = "Smarttelweb | We offer instant recharge of Airtime, Databundle, Cab
 
 @csrf_exempt
 def index(request):
-    print(request.user.email)
     response = {
         "pageTitle": pageTitle,
     }
@@ -24,14 +23,13 @@ def index(request):
 @login_required
 @csrf_exempt
 def buy_airtime_for_self(request, serviceID):
-    print(request.user)
-    wallet = WalletAPI()
-    bal = wallet.get_user_wallet_balance(request.user.username, request.user.email)
+    wallet = WalletAPI(request.user.username, request.user.email)
+    bal = wallet.get_user_wallet_balance()
     if serviceID in ["mtn", "airtel", "glo", "etisalat"]:
         if request.method == "POST":
             amount = request.POST.get("amount")
             number = request.POST.get("number")
-            if int(amount) >= bal and int(amount) < WalletAPI.MINIMUM_BAL: # wallet balance
+            if float(amount) >= bal or float(amount) < wallet.MINIMUM_BAL: # wallet balance
                 return JsonResponse({"status": "Error, please check your wallet balance"}, safe=False)
             if len(number) != 11:
                 return JsonResponse({"status": f"Phone number {number} is not upto 11 digits", "length_of_number": len(number)}, safe=False)
@@ -39,7 +37,7 @@ def buy_airtime_for_self(request, serviceID):
                 return JsonResponse({"status": f"Phone number {number} does not start with zero"}, safe=False)
             else:
                 request_ID = buy_airtime(serviceID, amount, number=number)
-                wallet.sub_user_wallet_balance(amount, request.user.username, request.user.email)
+                wallet.sub_user_wallet_balance(amount)
                 # TODO update user wallet balance
                 # TODO update user transaction history
                 return redirect(f"check_status/?request-id={request_ID}")
@@ -58,6 +56,5 @@ def check_airtime_status(request, serviceID):
 
 @login_required
 def buy_for_others(request):
-    print(request.user)
     return JsonResponse({"status": "Successful"}, safe=False)
 

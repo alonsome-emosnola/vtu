@@ -16,7 +16,7 @@ class Profile(models.Model):
     wallet_balance = models.DecimalField(default='0.00', max_digits=10, decimal_places=2)
     
     # REQUIRED_FIELDS = ('user', 'email', 'phone_number', 'email_verified', 'phone_verified', 'wallet_balance')
-    # USERNAME_FIELD = 'username'
+    # USERNAME_FIELD = 'username' 
 
     def __str__(self):
         return self.user.username

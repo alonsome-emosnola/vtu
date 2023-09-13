@@ -1,34 +1,40 @@
 from users.models import Profile
+from src.vtpass_get import get_balance
 
 class WalletAPI:
     
     MINIMUM_BAL = 50
 
-    def __init__(self):
-        # wallet_balances = Profile.objects.get().wallet_balance
-        # check if all users wallet balance is not equal or greater than admin balance and not less than minimum balance
-        pass
+    def __init__(self, username: str, email: str) -> str|None:
+        self.username = username
+        self.email = email
+        user_wallet_bal = self.get_user_wallet_balance()
+        admin_bal = self.get_admin_balance()
+        if user_wallet_bal > admin_bal or user_wallet_bal <= self.MINIMUM_BAL:
+            return ""
+        else:
+            pass
     
     def get_admin_balance(self):
-        pass
+        return get_balance()
     
-    def get_user_wallet_balance(self, username, email):
-        bal = Profile.objects.select_related('user').filter(user__username=username, user__email=email)[0].wallet_balance
+    def get_user_wallet_balance(self):
+        bal = Profile.objects.select_related('user').filter(user__username=self.username, user__email=self.email)[0].wallet_balance
         return bal
 
-    def add_user_wallet_balance(self, amount, username, email):
-        user = Profile.objects.select_related('user').filter(user__username=username, user__email=email)[0]
-        user.wallet_balance = user.wallet_balance + amount
+    def add_user_wallet_balance(self, amount:float):
+        user = Profile.objects.select_related('user').filter(user__username=self.username, user__email=self.email)[0]
+        user.wallet_balance = float(user.wallet_balance) + float(amount)
         user.save()
 
-    def sub_user_wallet_balance(self, amount, username, email):
-        user = Profile.objects.select_related('user').filter(user__username=username, user__email=email)[0]
-        user.wallet_balance = user.wallet_balance - amount
+    def sub_user_wallet_balance(self, amount:float):
+        user = Profile.objects.select_related('user').filter(user__username=self.username, user__email=self.email)[0]
+        user.wallet_balance = float(user.wallet_balance) - float(amount)
         user.save()
 
     def fund_user_wallet(self, user:dict):
         pass
-    
-# WalletAPI().sub_user_wallet_balance(200, "test2313", "test@test.com")
-bal = WalletAPI().get_user_wallet_balance("test2313", "test@test.com")
+
+# WalletAPI("test2313", "test@test.com").add_user_wallet_balance(99.1)
+bal = WalletAPI("test2313", "test@test.com").get_user_wallet_balance()
 print(bal)

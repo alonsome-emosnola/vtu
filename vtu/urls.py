@@ -30,7 +30,8 @@ urlpatterns = [
     path('airtime/', include("airtime.urls")),
     path('data/', include("data.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
-    path("payments/", include("payments.urls"))
+    path("payments/", include("payments.urls")),
+    path("payments/", include("referrals.urls"))
 ] + [
 
     path('user/', include('users.urls')),
